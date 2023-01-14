@@ -21,6 +21,7 @@ type Params = {
   args: string[];
   input: string;
   path: string;
+  paths: string[];
   highlights: HighlightGroup;
 };
 
@@ -129,7 +130,12 @@ export class Source extends BaseSource<Params> {
           return;
         }
 
-        const cmd = ["rg", ...args.sourceParams.args, input];
+        const cmd = [
+          "rg",
+          ...args.sourceParams.args,
+          input,
+          ...args.sourceParams.paths,
+        ];
         const cwd = args.sourceParams.path != ""
           ? args.sourceParams.path
           : await fn.getcwd(args.denops) as string;
@@ -210,6 +216,7 @@ export class Source extends BaseSource<Params> {
       args: ["--column", "--no-heading", "--color", "never"],
       input: "",
       path: "",
+      paths: [],
       highlights: {
         path: "Normal",
         lineNr: "Normal",
